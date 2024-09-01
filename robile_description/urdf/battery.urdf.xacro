@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="battery" params="name parent *origin color:='0.8 0.0 0.0 1.0'">
+
+    <xacro:include filename="$(find robile_description)/urdf/brick_housing.urdf.xacro" />
+
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${name}_link" />
+    </joint>
+
+    <xacro:brick_housing name="${name}" color="${color}"/>
+
+  </xacro:macro>
+
+</robot>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="passive_wheel" params="name parent *origin movable_joints:=true color:='0.0 0.0 0.8 1.0'">
+
+    <!-- Include xacro files-->
+    <xacro:include filename="$(find robile_description)/urdf/brick_housing.urdf.xacro" />
+    <xacro:include filename="$(find robile_description)/urdf/caster_wheel.urdf.xacro" />
+
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${name}_link" />
+    </joint>
+
+    <xacro:brick_housing name="${name}" with_wheel="true" color="${color}"/>
+
+    <xacro:caster_wheel name="${name}_caster_wheel" parent="${name}_link" movable_joints="${movable_joints}">
+      <origin xyz="0 0 0" rpy="0 0 0.0"/>
+    </xacro:caster_wheel>
+
+  </xacro:macro>
+
+</robot>

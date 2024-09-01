@@ -1,0 +1,5 @@
+name: harley
+layout:
+  - ["active_wheel", "active_wheel"]
+  - ["cpu", "battery"]
+  - ["passive_wheel", "active_wheel"]

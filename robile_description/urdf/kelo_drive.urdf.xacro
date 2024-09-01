@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="kelo_drive" params="name parent *origin movable_joints:=true">
+
+    <xacro:include filename="$(find robile_description)/urdf/common.xacro" />
+    <xacro:include filename="$(find robile_description)/urdf/kelo_drive_wheel.urdf.xacro" />
+
+    <!-- PIVOT -->
+    <xacro:if value="${movable_joints}">
+      <joint name="${name}_pivot_joint" type="continuous">
+        <xacro:insert_block name="origin" />
+        <axis xyz="0 0 1"/>
+        <parent link="${parent}"/>
+        <child link="${name}_pivot_link" />
+      </joint>
+
+      <transmission name="${name}_pivot_transmission">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${name}_pivot_joint">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${name}_pivot_motor">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+    </xacro:if>
+    <xacro:unless value="${movable_joints}">
+      <joint name="${name}_pivot_joint" type="fixed">
+        <xacro:insert_block name="origin" />
+        <axis xyz="0 0 1"/>
+        <parent link="${parent}"/>
+        <child link="${name}_pivot_link" />
+      </joint>
+    </xacro:unless>
+
+    <link name="${name}_pivot_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find robile_description)/meshes/kelo_drive/kelo_drive_base.dae" scale="1 1 1"/>
+      </geometry>
+    </visual>
+
+    <!--TODO: Set the correct collisions -->
+    <collision>
+      <origin xyz="0 0 0.07" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.105 0.154 0.025" />
+      </geometry>
+    </collision>
+
+    <!--TODO: Set the correct inertia-->
+    <xacro:cuboid_inertia mass="10.0" length="0.233" breadth="0.233" height="0.233"/>
+    </link>
+
+    <!-- LEFT HUB WHEEL -->
+    <xacro:kelo_drive_wheel name="${name}_left_hub_wheel" parent="${name}_pivot_link" movable_joints="${movable_joints}">
+      <origin xyz="-0.01 0.039326 0.001514" rpy="0 0 0.0"/>
+    </xacro:kelo_drive_wheel>
+
+    <!-- RIGHT HUB WHEEL -->
+    <xacro:kelo_drive_wheel name="${name}_right_hub_wheel" parent="${name}_pivot_link" movable_joints="${movable_joints}">
+      <origin xyz="-0.01 -0.039326 0.001514" rpy="0 0 0.0"/>
+    </xacro:kelo_drive_wheel>
+
+  </xacro:macro>
+
+</robot>

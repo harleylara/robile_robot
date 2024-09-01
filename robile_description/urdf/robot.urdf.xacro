@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="robile" >
+
+  <xacro:arg name="movable_joints" default="true"/>
+
+  <!-- Include desired robile bricks -->
+  <xacro:include filename="$(find robile_description)/urdf/active_wheel.urdf.xacro" />
+  <xacro:include filename="$(find robile_description)/urdf/passive_wheel_brick.urdf.xacro" />
+
+  <link name="base_link"/>
+  <!-- Robot Footprint -->
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+    <origin xyz="0.0 0.0 -0.01" rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_footprint"/>
+
+  <!-- Build platform using robile bricks -->
+  <xacro:active_wheel name="robile_1" parent="base_link" movable_joints="$(arg movable_joints)">
+    <!-- <origin xyz="0.233 0.1165 0.05" rpy="0.0 0.0 0.0"/> -->
+    <origin xyz="0.0 0.0 -0.01" rpy="0 0 0"/>
+  </xacro:active_wheel>
+  
+  <xacro:passive_wheel_brick name="robile_2" parent="base_link" movable_joints="$(arg movable_joints)">
+    <origin xyz="0.233 0.1165 0.05" rpy="0.0 0.0 0.0"/>
+  </xacro:passive_wheel_brick>
+
+</robot>
