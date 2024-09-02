@@ -37,8 +37,9 @@ class GenericBrick:
 
 class Robile:
 
-    __BRICK_WIDTH = 0.233
-    __BRICK_HEIGHT = 0.233
+    __BRICK_X_SIZE = 0.233
+    __BRICK_Y_SIZE = 0.233
+    __BRICK_Z_SIZE = 0.239
     __MOVABLES_BRICKS = ["active_wheel", "passive_wheel"]
     __NON_MOVABLES_BRICKS = ["cpu", "battery"]
     __SPECIAL_BRICKS = ["skip"]
@@ -94,34 +95,37 @@ class Robile:
 
     def __process_config(self):
 
-        rows = len(self.layout)
-        cols = max(len(row) for row in self.layout)
+        level = len(self.layout)
+        rows = len(self.layout[0])
+        cols = max(len(row) for row in self.layout[0])
 
-        total_width = cols * self.__BRICK_WIDTH
-        total_height = rows * self.__BRICK_HEIGHT
+        total_width = cols * self.__BRICK_X_SIZE
+        total_height = rows * self.__BRICK_Y_SIZE
 
         center_x = total_width / 2
         center_y = total_height / 2
 
-        for i, row in enumerate(self.layout):
-            for j, brick_name in enumerate(row):
-                brick_name = str(brick_name).strip().lower()
-                x = j * self.__BRICK_HEIGHT - center_x + (self.__BRICK_WIDTH / 2)
-                y = -(i * self.__BRICK_HEIGHT - center_y + (self.__BRICK_HEIGHT / 2))  # Negative because y decreases going up
+        for level, level_layout in enumerate(self.layout):
+            for i, row in enumerate(level_layout):
+                for j, brick_name in enumerate(row):
+                    brick_name = str(brick_name).strip().lower()
+                    x = j * self.__BRICK_Y_SIZE - center_x + (self.__BRICK_X_SIZE / 2)
+                    y = -(i * self.__BRICK_Y_SIZE - center_y + (self.__BRICK_Y_SIZE / 2))  # Negative because y decreases going up
+                    z = self.__BRICK_Z_SIZE * level
 
-                if brick_name in self.__SUPPORTED_BRICKS:
-                    if brick_name in self.__PHYSICAL_BRICKS:
-                        brick = GenericBrick(
-                            brick_type=brick_name,
-                            name=f"{brick_name}_{i}{j}",
-                            parent="base_link",
-                            pos=Position(x=x, y=y, z=0),
-                            rot=Rotation(roll=0, pitch=0, yaw=0),
-                            movable_joints=None if brick_name in self.__NON_MOVABLES_BRICKS else True
-                        )
-                        self.__xacro += str(brick)
-                else:
-                    raise ValueError(f"'{brick_name}' is not an supported brick. Supported bricks are {self.__SUPPORTED_BRICKS}.")
+                    if brick_name in self.__SUPPORTED_BRICKS:
+                        if brick_name in self.__PHYSICAL_BRICKS:
+                            brick = GenericBrick(
+                                brick_type=brick_name,
+                                name=f"{brick_name}_{i}{j}",
+                                parent="base_link",
+                                pos=Position(x=x, y=y, z=z),
+                                rot=Rotation(roll=0, pitch=0, yaw=0),
+                                movable_joints=None if brick_name in self.__NON_MOVABLES_BRICKS else True
+                            )
+                            self.__xacro += str(brick)
+                    else:
+                        raise ValueError(f"'{brick_name}' is not an supported brick. Supported bricks are {self.__SUPPORTED_BRICKS}.")
 
         self.__xacro += self.__xacro_eof
         # time to convert from XACRO to URDF

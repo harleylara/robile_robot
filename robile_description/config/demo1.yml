@@ -4,3 +4,7 @@ layout:
     - ["active_wheel", "active_wheel"]
     - ["cpu", "battery"]
     - ["active_wheel", "active_wheel"]
+  - # add other level of brick to your robot
+    - ["skip", "skip"]
+    - ["skip", "skip"]
+    - ["battery", "battery"]
