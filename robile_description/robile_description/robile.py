@@ -41,7 +41,9 @@ class Robile:
     __BRICK_HEIGHT = 0.233
     __MOVABLES_BRICKS = ["active_wheel", "passive_wheel"]
     __NON_MOVABLES_BRICKS = ["cpu", "battery"]
-    __SUPPORTED_BRICKS = __MOVABLES_BRICKS + __NON_MOVABLES_BRICKS
+    __SPECIAL_BRICKS = ["skip"]
+    __PHYSICAL_BRICKS = __MOVABLES_BRICKS + __NON_MOVABLES_BRICKS
+    __SUPPORTED_BRICKS = __PHYSICAL_BRICKS + __SPECIAL_BRICKS
 
     def __init__(self, config_file: Union[str, Path]) -> None:
 
@@ -108,17 +110,18 @@ class Robile:
                 y = -(i * self.__BRICK_HEIGHT - center_y + (self.__BRICK_HEIGHT / 2))  # Negative because y decreases going up
 
                 if brick_name in self.__SUPPORTED_BRICKS:
-                    brick = GenericBrick(
-                        brick_type=brick_name,
-                        name=f"{brick_name}_{i}{j}",
-                        parent="base_link",
-                        pos=Position(x=x, y=y, z=0),
-                        rot=Rotation(roll=0, pitch=0, yaw=0),
-                        movable_joints=None if brick_name in self.__NON_MOVABLES_BRICKS else True
-                    )
-                    self.__xacro += str(brick)
+                    if brick_name in self.__PHYSICAL_BRICKS:
+                        brick = GenericBrick(
+                            brick_type=brick_name,
+                            name=f"{brick_name}_{i}{j}",
+                            parent="base_link",
+                            pos=Position(x=x, y=y, z=0),
+                            rot=Rotation(roll=0, pitch=0, yaw=0),
+                            movable_joints=None if brick_name in self.__NON_MOVABLES_BRICKS else True
+                        )
+                        self.__xacro += str(brick)
                 else:
-                    raise ValueError(f"'{brick_name}' is not an supported brick. Supported blocks are {self.__SUPPORTED_BRICKS}.")
+                    raise ValueError(f"'{brick_name}' is not an supported brick. Supported bricks are {self.__SUPPORTED_BRICKS}.")
 
         self.__xacro += self.__xacro_eof
         # time to convert from XACRO to URDF
