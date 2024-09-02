@@ -3,7 +3,7 @@
 
   <xacro:macro name="cpu" params="name parent *origin color:='0.8 0.8 0.0 1.0'">
 
-    <xacro:include filename="$(find robile_description)/urdf/brick_housing.urdf.xacro" />
+    <xacro:include filename="$(find robile_description)/urdf/brick_macros/housing.urdf.xacro" />
 
     <joint name="${name}_joint" type="fixed">
       <xacro:insert_block name="origin" />

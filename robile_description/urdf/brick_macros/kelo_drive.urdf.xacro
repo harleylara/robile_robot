@@ -4,7 +4,7 @@
   <xacro:macro name="kelo_drive" params="name parent *origin movable_joints:=true">
 
     <xacro:include filename="$(find robile_description)/urdf/common.xacro" />
-    <xacro:include filename="$(find robile_description)/urdf/kelo_drive_wheel.urdf.xacro" />
+    <xacro:include filename="$(find robile_description)/urdf/brick_macros/kelo_drive_wheel.urdf.xacro" />
 
     <!-- PIVOT -->
     <xacro:if value="${movable_joints}">

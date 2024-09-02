@@ -1,5 +1,5 @@
-name: harley
+robot_name: "robile"
 layout:
   - ["active_wheel", "active_wheel"]
   - ["cpu", "battery"]
-  - ["passive_wheel", "active_wheel"]
+  - ["active_wheel", "active_wheel"]

@@ -4,8 +4,8 @@
   <xacro:macro name="passive_wheel" params="name parent *origin movable_joints:=true color:='0.0 0.0 0.8 1.0'">
 
     <!-- Include xacro files-->
-    <xacro:include filename="$(find robile_description)/urdf/brick_housing.urdf.xacro" />
-    <xacro:include filename="$(find robile_description)/urdf/caster_wheel.urdf.xacro" />
+    <xacro:include filename="$(find robile_description)/urdf/brick_macros/housing.urdf.xacro" />
+    <xacro:include filename="$(find robile_description)/urdf/brick_macros/caster_wheel.urdf.xacro" />
 
     <joint name="${name}_joint" type="fixed">
       <xacro:insert_block name="origin" />
